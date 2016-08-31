@@ -2,7 +2,8 @@
 var gulp = require('gulp');
 var release = require('gulp-github-release');
 var gulpUtil = require('gulp-util');
-var tag = new Date().toISOString().replace(/T.+$/, '').replace(/-/g, '.');
+//var tag = new Date().toISOString().replace(/T.+$/, '').replace(/-/g, '.');
+var tag = '1.0.0';
 
 // js concat & minify
 gulp.task('release', function () {
