@@ -1,0 +1,28 @@
+{
+  "name": "github-experiments",
+  "version": "1.0.0",
+  "description": "just experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/belicekm/github-experiments.git"
+  },
+  "keywords": [
+    "experiments"
+  ],
+  "author": "Miroslav Belicek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/belicekm/github-experiments/issues"
+  },
+  "homepage": "https://github.com/belicekm/github-experiments#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-github-release": "^1.1.5",
+    "gulp-util": "^3.0.7",
+    "yargs": "^5.0.0"
+  }
+}
