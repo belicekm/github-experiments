@@ -46,7 +46,7 @@ gulp.task('release', ['gittag'], function () {
 			//repo: 'publish-release',          // if missing, it will be extracted from manifest (the repository.url field)
 			//tag: 'release-' + tag,              // if missing, the version will be extracted from manifest and prepended by a 'v'
 			tag: lastestTag,
-			name: 'publish release ' + tag,     // if missing, it will be the same as the tag
+			name: 'publish release ' + lastestTag,     // if missing, it will be the same as the tag
 			notes: 'very good!',                // if missing it will be left undefined
 			draft: false,                       // if missing it's false
 			prerelease: false,                  // if missing it's false
