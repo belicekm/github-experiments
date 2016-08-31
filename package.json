@@ -22,7 +22,6 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-github-release": "^1.1.5",
-    "gulp-util": "^3.0.7",
-    "yargs": "^5.0.0"
+    "gulp-util": "^3.0.7"
   }
 }
