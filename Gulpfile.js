@@ -2,7 +2,6 @@
 var gulp = require('gulp');
 var release = require('gulp-github-release');
 var gutil = require('gulp-util');
-var git = require('git-rev');
 var exec = require('child_process').exec;
 
 //var tag = new Date().toISOString().replace(/T.+$/, '').replace(/-/g, '.');
