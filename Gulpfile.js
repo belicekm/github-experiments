@@ -5,12 +5,15 @@ var gutil = require('gulp-util');
 var exec = require('child_process').exec;
 
 //var tag = new Date().toISOString().replace(/T.+$/, '').replace(/-/g, '.');
-//var tag = '1.0.0';
-var lastestTag;
+//var tag = 'release-1.0.0';
+var latestTag;
 
 gulp.task('gittag', function () {
+	// sorted from latest
+	var cmd = 'git tag -l --sort=-refname "release-*"';
+
 	return new Promise(function (resolve, reject) {
-		exec('git tag', function (error, stdout, stderr) {
+		exec(cmd, function (error, stdout, stderr) {
 			var outText = '' + stdout,
 				errText = '' + stderr;
 
@@ -31,7 +34,6 @@ gulp.task('gittag', function () {
 					gutil.log('Using GIT tag: ' + latestTag);
 					resolve();
 				}
-				//console.log(outText.split(/\s/)[0]);
 			}
 		});
 	});
@@ -45,8 +47,8 @@ gulp.task('release', ['gittag'], function () {
 			//owner: owner,                    	// if missing, it will be extracted from manifest (the repository.url field)
 			//repo: 'publish-release',          // if missing, it will be extracted from manifest (the repository.url field)
 			//tag: 'release-' + tag,              // if missing, the version will be extracted from manifest and prepended by a 'v'
-			tag: lastestTag,
-			name: 'publish release ' + lastestTag,     // if missing, it will be the same as the tag
+			tag: latestTag,
+			name: 'publish release ' + latestTag,     // if missing, it will be the same as the tag
 			notes: 'very good!',                // if missing it will be left undefined
 			draft: false,                       // if missing it's false
 			prerelease: false,                  // if missing it's false
