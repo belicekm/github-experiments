@@ -4,14 +4,14 @@ var release = require('gulp-github-release');
 var gutil = require('gulp-util');
 var exec = require('child_process').exec;
 
-var TAG_ERR_TEXT = 'Unable to resolve GIT TAG';
+var TAG_ERR_TEXT = 'Unable to resolve GIT TAG from environment variable GIT_LATEST_TAG';
 
 gulp.task('release', function (callback) {
 	var latestTag = process.env.GIT_LATEST_TAG;
 	if (latestTag)
 	{
-		console.log(latestTag);
-		gulp.src('./dist/deploy.zip')
+		gutil.log('Using release tag: ' + latestTag);
+		return gulp.src('./dist/deploy.zip')
 			.pipe(release({
 				tag: latestTag,
 				name: 'publish release ' + latestTag,     // if missing, it will be the same as the tag
