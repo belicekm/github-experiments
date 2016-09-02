@@ -4,49 +4,53 @@ var release = require('gulp-github-release');
 var gutil = require('gulp-util');
 var exec = require('child_process').exec;
 
-//var tag = new Date().toISOString().replace(/T.+$/, '').replace(/-/g, '.');
-//var tag = 'release-1.0.0';
+var TAG_ERR_TEXT = 'Unable to resolve GIT TAG';
 var latestTag;
 
-gulp.task('gittag', function () {
-	// sorted from latest
-	var cmd = 'git tag -l --sort=-refname "release-*"';
+gulp.task('gittag:collect', function (cb) {
+	// sorted list of GIT tags (latest will be first)
+	//var cmd = 'git tag -l --sort=-refname "release-*"';
+	var cmd = 'git describe --tags --abbrev=0 --match release-*';
+	
+	//for /f "git describe --tags --abbrev=0 --match release-*" %%a in ('ver') do @set foobar=%%a
+	//for /f %%i in ('git describe --tags --abbrev=^0 --match release-*') do set GIT_LATEST_TAG=%%i
 
-	return new Promise(function (resolve, reject) {
-		exec(cmd, function (error, stdout, stderr) {
-			var outText = '' + stdout,
-				errText = '' + stderr;
+	exec(cmd, function (error, stdout, stderr) {
+		var outText = '' + stdout,
+			errText = '' + stderr;
 
-			if (error || errText || !outText)
+		
+		if (error || errText || !outText)
+		{
+			cb(TAG_ERR_TEXT);
+		}
+		else
+		{
+			latestTag = outText.split(/\s/)[0];
+			if (!latestTag)
 			{
-				reject();
+				gutil.log(gutil.colors.red('GIT tag not found - aborting!'));
+				cb(TAG_ERR_TEXT);
+			}
+			else if (!(/^release-\d+\.\d+\.\d+/).test(latestTag))
+			{
+				gutil.log(gutil.colors.red('Invalid GIT tag format "' + latestTag + '" expected "release-n.n.n".'));
+				cb(TAG_ERR_TEXT);
 			}
 			else
 			{
-				latestTag = outText.split(/\s/)[0];
-				if (!latestTag)
-				{
-					gutil.log(gutil.colors.red('GIT tag not found - aborting!'));
-					reject();
-				}
-				else
-				{
-					gutil.log('Using GIT tag: ' + latestTag);
-					resolve();
-				}
+				gutil.log('Using GIT tag: ' + latestTag);
+				cb();
 			}
-		});
+		}
 	});
 });
 
 // js concat & minify
-gulp.task('release', ['gittag'], function () {
+gulp.task('release', ['gittag:collect'], function () {
+	console.log(latestTag);
 	gulp.src('./dist/deploy.zip')
 		.pipe(release({
-			//token: token,                     // or you can set an env var called GITHUB_TOKEN instead
-			//owner: owner,                    	// if missing, it will be extracted from manifest (the repository.url field)
-			//repo: 'publish-release',          // if missing, it will be extracted from manifest (the repository.url field)
-			//tag: 'release-' + tag,              // if missing, the version will be extracted from manifest and prepended by a 'v'
 			tag: latestTag,
 			name: 'publish release ' + latestTag,     // if missing, it will be the same as the tag
 			notes: 'very good!',                // if missing it will be left undefined

@@ -1,0 +1,1 @@
+for /f %%i in ('git describe --tags --abbrev^=0 --match release-*') do set GIT_LATEST_TAG=%%i
