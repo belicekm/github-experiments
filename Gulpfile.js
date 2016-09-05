@@ -19,7 +19,7 @@ gulp.task('release', function (callback) {
 				draft: false,                       // if missing it's false
 				prerelease: false,                  // if missing it's false
 				manifest: require('./package.json') // package.json from which default values will be extracted if they're missing
-			}).on('end', function () {
+			}).on('error', function () {
 				throw new gutil.PluginError({
 					plugin: 'gulp release',
 					message: 'Failed to make a release!'
