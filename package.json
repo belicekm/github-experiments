@@ -21,7 +21,7 @@
   "homepage": "https://github.com/belicekm/github-experiments#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-github-release": "^1.1.5",
+    "gulp-github-release": "^1.1.6",
     "gulp-util": "^3.0.7"
   }
 }
