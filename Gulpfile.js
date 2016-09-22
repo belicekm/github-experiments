@@ -15,19 +15,13 @@ gulp.task('gittag', function () {
 			var outText = '' + stdout,
 				errText = '' + stderr;
 
-			if (error || errText || !outText)
-			{
+			if (error || errText || !outText) {
 				reject();
-			}
-			else
-			{
+			} else {
 				latestReleaseTag = outText.trim();
-				if (latestReleaseTag)
-				{
+				if (latestReleaseTag) {
 					resolve();
-				}
-				else
-				{
+				} else {
 					gutil.log(gutil.colors.red('GIT tag not found - aborting!'));
 					reject();
 				}
@@ -40,10 +34,10 @@ gulp.task('gittag', function () {
 // Depends on GITHUB_TOKEN
 gulp.task('release:novar', ['gittag'], function (callback) {
 	gutil.log('Using release tag: ' + latestReleaseTag);
-	if (process.env.GITHUB_TOKEN)
-	{
+	if (process.env.GITHUB_TOKEN) {
 		return gulp
-				.src('./dist/deploy.zip')
+				//.src('./dist/deploy.zip')
+				.src([])
 				.pipe(release({
 					token: process.env.GITHUB_TOKEN,
 					tag: latestReleaseTag,
@@ -53,9 +47,7 @@ gulp.task('release:novar', ['gittag'], function (callback) {
 					prerelease: false,                  // if missing it's false
 					manifest: require('./package.json') // package.json from which default values will be extracted if they're missing
 				}));
-	}
-	else
-	{
+	} else {
 		callback('Unable to resolve GitHub authentication token from environment variable GITHUB_TOKEN');
 	}
 });
