@@ -6,6 +6,21 @@ var exec = require('child_process').exec;
 
 var latestReleaseTag;
 
+// generate version.js with GIT tag logged to console
+gulp.task('version', ['gittag'], function () {
+	var src = require('stream').Readable({objectMode: true});
+	src._read = function () {
+		this.push(new gutil.File({
+			cwd: "",
+			base: "",
+			path: 'version.js',
+			contents: new Buffer('console.log("RELEASE VERSION: ' + latestReleaseTag + '")')
+		}));
+		this.push(null)
+	};
+	return src.pipe(gulp.dest('dist/'))
+});
+
 // get latest GIT tag which has "release-" prefix and store it in latestReleaseTag variable.
 gulp.task('gittag', function () {
 	return new Promise(function (resolve, reject) {
@@ -16,14 +31,15 @@ gulp.task('gittag', function () {
 				errText = '' + stderr;
 
 			if (error || errText || !outText) {
-				reject();
+				gutil.colors.red('GIT tag not found - aborting!')
+				reject('GIT tag not found - aborting!');
 			} else {
 				latestReleaseTag = outText.trim();
 				if (latestReleaseTag) {
 					resolve();
 				} else {
 					gutil.log(gutil.colors.red('GIT tag not found - aborting!'));
-					reject();
+					reject('GIT tag not found - aborting!');
 				}
 			}
 		});
@@ -32,7 +48,7 @@ gulp.task('gittag', function () {
 
 // Perform GitHub release using public GitHub API
 // Depends on GITHUB_TOKEN
-gulp.task('release:novar', ['gittag'], function (callback) {
+gulp.task('release:novar', ['version'], function (callback) {
 	gutil.log('Using release tag: ' + latestReleaseTag);
 	if (process.env.GITHUB_TOKEN) {
 		return gulp
@@ -41,8 +57,8 @@ gulp.task('release:novar', ['gittag'], function (callback) {
 				.pipe(release({
 					token: process.env.GITHUB_TOKEN,
 					tag: latestReleaseTag,
-					name: 'publish release ' + latestReleaseTag,     // if missing, it will be the same as the tag
-					notes: 'very good!',                // if missing it will be left undefined
+					name: 'Release ' + latestReleaseTag,     // if missing, it will be the same as the tag
+					//notes: 'very good!',                // if missing it will be left undefined
 					draft: false,                       // if missing it's false
 					prerelease: false,                  // if missing it's false
 					manifest: require('./package.json') // package.json from which default values will be extracted if they're missing
