@@ -1,4 +1,6 @@
 # github-experiments
+[![Build Status](https://semaphoreci.com/api/v1/belicekm/github-experiments/branches/master/badge.svg)](https://semaphoreci.com/belicekm/github-experiments)  
+
 Just to experiment with github
 <table>
 	<thead>
