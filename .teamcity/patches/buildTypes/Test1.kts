@@ -2,6 +2,7 @@ package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2018_1.*
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildFeatures.replaceContent
+import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2018_1.ui.*
 
@@ -35,7 +36,14 @@ changeBuildType(RelativeId("Test1")) {
                 param("jonnyzzz.gulp.tasks", "build")
             }
         }
-        items.removeAt(2)
+        insert(2) {
+            dotnetBuild {
+                name = "build .net"
+                projects = "Test.txt"
+                param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
+            }
+        }
+        items.removeAt(3)
     }
 
     features {
