@@ -9,6 +9,12 @@ To apply the patch, change the buildType with id = 'Test1'
 accordingly, and delete the patch script.
 */
 changeBuildType(RelativeId("Test1")) {
+    params {
+        add {
+            param("my config param", "12345")
+        }
+    }
+
     requirements {
         add {
             contains("system.agent.name", "mirek-pc-1")
