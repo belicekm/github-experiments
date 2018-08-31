@@ -1,5 +1,9 @@
 import jetbrains.buildServer.configs.kotlin.v2018_1.*
+import jetbrains.buildServer.configs.kotlin.v2018_1.buildFeatures.replaceContent
+import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.v2018_1.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.v2018_1.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -28,6 +32,8 @@ version = "2018.1"
 project {
     description = "Test"
 
+    vcsRoot(GithubExperimentsStaging)
+
     buildType(Test1)
     buildType(Test2)
 }
@@ -36,20 +42,49 @@ object Test1 : BuildType({
     name = "Test"
     description = "Test"
 
+    params {
+        param("MyConfigParam", "12345")
+    }
+
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("GithubExperiments"))
+        root(GithubExperimentsStaging)
     }
 
     steps {
-
         script {
             name = "test"
             scriptContent = "dir"
         }
-        script {
+        step {
             name = "test2"
-            scriptContent = "ls -la"
+            type = "jonnyzzz.gulp"
+            param("jonnyzzz.gulp.tasks", "build")
         }
+        dotnetBuild {
+            name = "build .net"
+            projects = "Test.txt"
+            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
+        }
+    }
+
+    triggers {
+        vcs {
+            triggerRules = "+:*"
+            branchFilter = ""
+        }
+    }
+
+    features {
+        replaceContent {
+            fileRules = "Text.txt"
+            pattern = "bla"
+            replacement = "bla1"
+        }
+    }
+
+    requirements {
+        contains("system.agent.name", "mirek-pc-1")
     }
 })
 
@@ -58,21 +93,25 @@ object Test2 : BuildType({
     description = "Test2"
 
     vcs {
-        root(DslContext.settingsRoot)
+        root(AbsoluteId("GithubExperiments"))
     }
 
     steps {
-
         script {
             name = "test"
             scriptContent = "dir"
         }
-
         step {
             name = "test2"
             type = "jonnyzzz.npm"
             param("npm_commands", "list -g --depth 0")
         }
-
     }
+})
+
+object GithubExperimentsStaging : GitVcsRoot({
+    name = "github-experiments:staging"
+    url = "https://github.com/belicekm/github-experiments.git"
+    branch = "refs/heads/staging"
+    useTagsAsBranches = true
 })
