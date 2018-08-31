@@ -2,6 +2,7 @@ package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2018_1.*
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildFeatures.replaceContent
+import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2018_1.ui.*
 
 /*
@@ -14,6 +15,27 @@ changeBuildType(RelativeId("Test1")) {
         add {
             param("MyConfigParam", "12345")
         }
+    }
+
+    expectSteps {
+        script {
+            name = "test"
+            scriptContent = "dir"
+        }
+        script {
+            name = "test2"
+            scriptContent = "ls -la"
+        }
+    }
+    steps {
+        insert(1) {
+            step {
+                name = "test2"
+                type = "jonnyzzz.gulp"
+                param("jonnyzzz.gulp.tasks", "build")
+            }
+        }
+        items.removeAt(2)
     }
 
     features {
