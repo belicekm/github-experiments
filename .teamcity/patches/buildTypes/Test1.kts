@@ -11,7 +11,7 @@ accordingly, and delete the patch script.
 changeBuildType(RelativeId("Test1")) {
     params {
         add {
-            param("my config param", "12345")
+            param("MyConfigParam", "12345")
         }
     }
 
