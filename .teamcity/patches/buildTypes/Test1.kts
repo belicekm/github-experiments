@@ -4,6 +4,7 @@ import jetbrains.buildServer.configs.kotlin.v2018_1.*
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildFeatures.replaceContent
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.v2018_1.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.v2018_1.ui.*
 
 /*
@@ -44,6 +45,15 @@ changeBuildType(RelativeId("Test1")) {
             }
         }
         items.removeAt(3)
+    }
+
+    triggers {
+        add {
+            vcs {
+                triggerRules = "+:*"
+                branchFilter = ""
+            }
+        }
     }
 
     features {
