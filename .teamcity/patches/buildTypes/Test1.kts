@@ -19,6 +19,10 @@ changeBuildType(RelativeId("Test1")) {
         }
     }
 
+    vcs {
+        add(RelativeId("GithubExperimentsStaging"))
+    }
+
     expectSteps {
         script {
             name = "test"
