@@ -28,10 +28,11 @@ version = "2018.1"
 project {
     description = "Test"
 
-    buildType(Test)
+    buildType(Test1)
+    buildType(Test2)
 }
 
-object Test : BuildType({
+object Test1 : BuildType({
     name = "Test"
     description = "Test"
 
@@ -40,9 +41,35 @@ object Test : BuildType({
     }
 
     steps {
+
         script {
             name = "test"
             scriptContent = "dir"
+        }
+        script {
+            name = "test2"
+            scriptContent = "ls -la"
+        }
+    }
+})
+
+object Test2 : BuildType({
+    name = "Test2"
+    description = "Test2"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+
+        script {
+            name = "test"
+            scriptContent = "dir"
+        }
+        script {
+            name = "test2"
+            scriptContent = "ls -la"
         }
     }
 })
