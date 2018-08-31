@@ -62,6 +62,7 @@ object Test2 : BuildType({
     }
 
     steps {
+
         script {
             name = "test"
             scriptContent = "dir"
