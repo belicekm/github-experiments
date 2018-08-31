@@ -62,14 +62,16 @@ object Test2 : BuildType({
     }
 
     steps {
-
         script {
             name = "test"
             scriptContent = "dir"
         }
-        script {
+
+        step {
             name = "test2"
-            scriptContent = "ls -la"
+            type = "jonnyzzz.npm"
+            param("npm_commands", "list -g --depth 0")
         }
+
     }
 })
