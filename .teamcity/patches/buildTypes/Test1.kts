@@ -1,6 +1,7 @@
 package patches.buildTypes
 
 import jetbrains.buildServer.configs.kotlin.v2018_1.*
+import jetbrains.buildServer.configs.kotlin.v2018_1.buildFeatures.replaceContent
 import jetbrains.buildServer.configs.kotlin.v2018_1.ui.*
 
 /*
@@ -12,6 +13,16 @@ changeBuildType(RelativeId("Test1")) {
     params {
         add {
             param("MyConfigParam", "12345")
+        }
+    }
+
+    features {
+        add {
+            replaceContent {
+                fileRules = "Text.txt"
+                pattern = "bla"
+                replacement = "bla1"
+            }
         }
     }
 
