@@ -13,7 +13,5 @@ create(DslContext.projectId, GitVcsRoot({
     id("HttpsGithubComBelicekmGithubExperimentsGit")
     name = "https://github.com/belicekm/github-experiments.git"
     url = "https://github.com/belicekm/github-experiments.git"
-    authMethod = password {
-    }
 }))
 
